@@ -109,7 +109,7 @@ export async function burnFromKAIBP(web3State,from,amt) {
         console.log(receipt);
         
     } catch (error) {
-        console.error('Error in buring from Kai ', error);
+        console.error('Error in buring from KaiBP ', error);
     }
 }
 export async function MintOnKAIBP(web3State,to,amt) {
@@ -126,7 +126,7 @@ export async function MintOnKAIBP(web3State,to,amt) {
         console.log(receipt);
         
     } catch (error) {
-        console.error('Error in buring from Kai ', error);
+        console.error('Error in Minting on KaiBP ', error);
     }
 }
 
@@ -144,7 +144,7 @@ export async function MintOnKAI(web3State,to,amt) {
         console.log(receipt);
         
     } catch (error) {
-      console.error('Error in buring from Kai ', error);
+      console.error('Error in Minting on Kai ', error);
     }
   }
 
