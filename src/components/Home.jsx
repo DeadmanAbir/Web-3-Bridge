@@ -7,7 +7,11 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { wallet } from "../Store/Variables";
 import BridgeKaiABI from "../abis/BridgeKai.json";
 import BridgeKaiBPABI from "../abis/BridgeKaiBP.json";
+import kaiToken from "../abis/KaiToken.json";
+import kbpToken from "../abis/KaiBPToken.json";
 import { ToastContainer, toast } from 'react-toastify';
+import Web3 from 'web3';
+
 import 'react-toastify/dist/ReactToastify.css';
 import { burnFromKAIBP, MintOnKAI, MintOnKAIBP, burnFromKAI } from "./web3";
 const home = () => {
@@ -31,7 +35,10 @@ const home = () => {
     signer: undefined,
     BridgeKaicontract: undefined,
     BridgeKaiBPcontract: undefined,
-    userAdd: ""
+    Kaicontract:undefined,
+    KaiBPcontract:undefined,
+    userAdd: "",
+    web3:undefined,
   });
 
 
@@ -45,23 +52,32 @@ const home = () => {
           const signer = await provider.getSigner();
 
           // Create a contract instance
-          const BridgeKaicontractAddress = "0x9135D33304cdC48AAEDe2daD2CCf51D91546CB1F";
-          const BridgeKaiBPcontractAddress = "0x9135D33304cdC48AAEDe2daD2CCf51D91546CB1F";
-          const BridgeKaicontract = new ethers.Contract(BridgeKaicontractAddress, BridgeKaiABI, signer);
-          const BridgeKaiBPcontract = new ethers.Contract(BridgeKaiBPcontractAddress, BridgeKaiBPABI, signer);
+          const BridgeKaicontractAddress = "0xB5969fa2c98DCFa597A2302df144e8cc2180c0e9";
+          const BridgeKaiBPcontractAddress = "0xbd0Fe49c0451d7b7239E97684E7d2Bf83e0f340C";
+          const kbpTokenad = "0x68AFf0E8f8bc2e537b3f3eaF4ddA56a23C957ce3";
+          const kaiTokenad = "0x5adE78C865Af0aAce86803BA8FAa0a7671B96884"
+          const BridgeKaicontract = new ethers.Contract(BridgeKaicontractAddress,BridgeKaiABI, signer);
+          const BridgeKaiBPcontract = new ethers.Contract(BridgeKaiBPcontractAddress,BridgeKaiBPABI, signer);
+          const Kaicontract = new ethers.Contract(kaiTokenad,kbpToken, signer);
+          const KaiBPcontract = new ethers.Contract(kbpTokenad,kaiToken, signer);
 
           let accounts = await provider.send("eth_requestAccounts", []);
           let userAddress = accounts[0];
 
           // Update the web3 state
+          const web3 = new Web3(provider);
           setWeb3State({
             provider,
             signer,
             BridgeKaicontract: BridgeKaicontract,
             BridgeKaiBPcontract: BridgeKaiBPcontract,
+            Kaicontract:Kaicontract,
+            KaiBPcontract:KaiBPcontract,
             userAdd: userAddress,
+            web3:web3,
           });
           console.log("updating web3State")
+
         } else {
           console.error('No wallet found!');
         }
@@ -85,15 +101,16 @@ const home = () => {
       notifyError("You can't swap between two tokens");
       return
     }
-    if (!fromAmount || !toAmount) {
+    if (!fromAmount) {
       return notifyError("Please select some amount");
     }
-
+    let weiAmount = 0;
     if (fromToken == "KAI-BEP20") {
+      weiAmount = web3State.web3.utils.toWei(fromAmount.toString(), 'ether');
       try {
-        const response = await burnFromKAI(web3State, walletAddress, "100000000000");
+        const response = await burnFromKAIBP(web3State, walletAddress, weiAmount);
         console.log(response);
-        const mint = await MintOnKAIBP(web3State, walletAddress, "100000000000");
+        const mint = await MintOnKAI(web3State, walletAddress, weiAmount);
         return notifySuccess("Transaction successful");
       } catch (e) {
         console.log(e);
@@ -101,8 +118,8 @@ const home = () => {
       }
     } else {
       try {
-        const response = await burnFromKAIBP(web3State, walletAddress, "100000000000");
-        const mint = await MintOnKAI(web3State, walletAddress, "100000000000");
+        const response = await burnFromKAI(web3State, walletAddress, weiAmount );
+        const mint = await MintOnKAIBP(web3State, walletAddress,  weiAmount);
         return notifySuccess("Transaction Successful")
       } catch (e) {
         console.log(e);
@@ -156,9 +173,8 @@ const home = () => {
           <div className="flex items-center justify-between text-start bg-[#1B1B1B] px-4 mx-2 py-6 lg:py-3 mt-1 rounded-xl hover:border hover:border-gray-800">
             <div className="text-gray-500">
               <h1 className="text-[16px] font-[700] leading-[20px]">You pay</h1>
-              <input placeholder="0" type="number" className="text-[28px] font-[600] w-[50%] bg-[#1B1B1B] outline-none" onChange={(e) => {
-                setToAmount(e.target.value)
-              }} ></input>
+              <p  className="text-[28px] font-[600] w-[50%] bg-[#1B1B1B] outline-none" 
+              ></p>
               {/* <p className="text-[16px] font-normal text-gray-400 lg:block hidden">
                 $1,660.61
               </p> */}
