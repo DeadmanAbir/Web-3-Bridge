@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// pragma solidity ^0.8.0;
+pragma solidity ^0.8.0;
 
 // import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
@@ -39,7 +39,7 @@
 //     nonce++;
 //   }
 
-//   function mint(address to, uint amount, uint otherChainNonce) external {
+//   function mint(address to, uint amount) external {
 //     require(token.transferFrom(admin,to, amount), "Mint failed");
 //     emit Transfer(
 //       admin,
