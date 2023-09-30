@@ -1,4 +1,62 @@
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
+import { getAddress } from "../../../Store/Getters";
+import {useRecoilValue, useSetRecoilState} from "recoil";
+import { wallet } from "../../../Store/Variables";
 const Navbar = () => {
+  // const [walletAddress, setWalletAddress] = useState('');
+  const walletAddress=useRecoilValue(getAddress);
+  const setWalletAddress=useSetRecoilState(wallet);
+
+  useEffect(()=>{
+    getCurrent();
+    newWallet();
+  })
+    const connectWallet = async () => {
+      try{
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const accounts=await provider.send('eth_requestAccounts', []);
+        if(accounts && accounts.length>0){
+          const address= accounts[0];
+          setWalletAddress({
+            address: address});
+        }else{
+          alert("ethereum provider not available");
+        }
+      }catch(e){
+        console.log(e);
+      }
+    }
+    async function getCurrent(){
+       if(typeof window !='undefined' && typeof window.ethereum !='undefined'){
+        try{
+          const accounts=await window.ethereum.request({method: "eth_requestAccounts"});
+          if(accounts.length>0){
+            setWalletAddress({
+             address: accounts[0]
+            });
+            console.log(accounts[0]);
+          }else{
+            console.log("Connect with metamask");
+          }
+       }catch(e){
+        console.log(e);
+       }
+    }
+  }
+
+  async function newWallet(){
+    if(typeof window !='undefined' && typeof window.ethereum !='undefined'){
+      window.ethereum.on("accountsChanged", (accounts)=>{
+        setWalletAddress({address: accounts[0]});
+      })
+    }else{
+      setWalletAddress("");
+      console.log("please install metamask");
+    }
+  }
+     
+
   return (
     <div>
       <div className="bg-[#131313] flex items-center justify-between px-8 py-4">
@@ -25,8 +83,8 @@ const Navbar = () => {
           </div>
         </div>
         <div>
-          <button className="bg-[#311C31] mt-2 text-[#F275F8] mx-2 px-5 py-2 rounded-2xl font-[700] text-[20px]">
-            Connect
+          <button className="bg-[#311C31] mt-2 text-[#F275F8] mx-2 px-5 py-2 rounded-2xl font-[700] text-[20px]" onClick={connectWallet}>
+            {walletAddress.length>0 ? `${walletAddress.substring(0,6)}....${walletAddress.substring(38)}` : "Connect"}
           </button>
         </div>
       </div>

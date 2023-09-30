@@ -6,6 +6,13 @@ import { useState,useEffect } from 'react';
 
 
 
+//recoil functions
+
+
+
+
+
+
 // connectWallet() function:
 
 export async function connectWallet() {  
@@ -27,7 +34,7 @@ export async function connectWallet() {
 export function useWeb3State() {
 
   const [web3State, setWeb3State] = useState({
-    provider: undefined,
+    provider: null,
     signer: undefined,
     BridgeKaicontract: undefined,
     BridgeKaiBPcontract: undefined,
@@ -45,8 +52,8 @@ export function useWeb3State() {
           const signer = provider.getSigner();
 
           // Create a contract instance
-          const BridgeKaicontractAddress = process.env.BRIDGE_KAI_CONTRACT;
-          const BridgeKaiBPcontractAddress = process.env.BRIDGE_KAIBP_CONTRACT;
+          const BridgeKaicontractAddress = "0x9135D33304cdC48AAEDe2daD2CCf51D91546CB1F";
+          const BridgeKaiBPcontractAddress = "0x9135D33304cdC48AAEDe2daD2CCf51D91546CB1F";
           const BridgeKaicontract = new ethers.Contract(BridgeKaicontractAddress,BridgeKaiABI, signer);
           const BridgeKaiBPcontract = new ethers.Contract(BridgeKaiBPcontractAddress,BridgeKaiBPABI, signer);
 
@@ -61,7 +68,7 @@ export function useWeb3State() {
             BridgeKaiBPcontract: BridgeKaiBPcontract,
             userAdd: userAddress,
           });
-          
+
         } else {
           console.error('No wallet found!');
         }
@@ -80,7 +87,7 @@ export function useWeb3State() {
 
 export async function burnFromKAI(web3State,from,amt) {
   // Function to mint an NFT
-  if (!web3State.signer || !web3State.contract) {
+  if (!web3State.signer || !web3State.BridgeKaicontract) {
     console.error('Signer or contract is undefined');
     return;
   }
@@ -97,7 +104,7 @@ export async function burnFromKAI(web3State,from,amt) {
 }
 export async function burnFromKAIBP(web3State,from,amt) {
     // Function to mint an NFT
-    if (!web3State.signer || !web3State.contract) {
+    if (!web3State.signer || !web3State.BridgeKaiBPcontract) {
         console.error('Signer or contract is undefined');
         return;
     }
@@ -114,7 +121,7 @@ export async function burnFromKAIBP(web3State,from,amt) {
 }
 export async function MintOnKAIBP(web3State,to,amt) {
     // Function to mint an NFT
-    if (!web3State.signer || !web3State.contract) {
+    if (!web3State.signer || !web3State.BridgeKaiBPcontract) {
         console.error('Signer or contract is undefined');
         return;
     }
@@ -132,7 +139,7 @@ export async function MintOnKAIBP(web3State,to,amt) {
 
 export async function MintOnKAI(web3State,to,amt) {
     // Function to mint an NFT
-    if (!web3State.signer || !web3State.contract) {
+    if (!web3State.signer || !web3State.BridgeKaicontract) {
         console.error('Signer or contract is undefined');
         return;
     }
