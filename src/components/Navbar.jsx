@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import { getAddress } from "../../../Store/Getters";
+import { getAddress } from "../Store/Getters";
 import {useRecoilValue, useSetRecoilState} from "recoil";
-import { wallet } from "../../../Store/Variables";
+import { wallet } from "../Store/Variables";
 const Navbar = () => {
   // const [walletAddress, setWalletAddress] = useState('');
   const walletAddress=useRecoilValue(getAddress);

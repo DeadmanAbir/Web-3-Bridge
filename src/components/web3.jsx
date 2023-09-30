@@ -6,14 +6,7 @@ import { useState,useEffect } from 'react';
 
 
 
-//recoil functions
 
-
-
-
-
-
-// connectWallet() function:
 
 export async function connectWallet() {  
   if (window.ethereum) {
