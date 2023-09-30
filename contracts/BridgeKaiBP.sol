@@ -8,4 +8,4 @@
 // }
 
 
-// Deployed on celo at  : 0xa104ff6d5ABB049d6CCEd32EC80Cb8D04526826A
+// Deployed on celo at  : 0xf8a731eaF48b55243cbB96C6dFCb8f2Bb4B90be0
