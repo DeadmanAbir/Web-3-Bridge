@@ -7,8 +7,8 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { wallet } from "../Store/Variables";
 import BridgeKaiABI from "../abis/BridgeKai.json";
 import BridgeKaiBPABI from "../abis/BridgeKaiBP.json";
-import kaiToken from "../abis/KaiToken.json";
-import kbpToken from "../abis/KaiBPToken.json";
+import kaiToken from "../abis/KaiToken2.json";
+import kbpToken from "../abis/KaiBPToken2.json";
 import { ToastContainer, toast } from 'react-toastify';
 import Web3 from 'web3';
 
@@ -52,10 +52,10 @@ const home = () => {
           const signer = await provider.getSigner();
 
           // Create a contract instance
-          const BridgeKaicontractAddress = "0xB5969fa2c98DCFa597A2302df144e8cc2180c0e9";
-          const BridgeKaiBPcontractAddress = "0xbd0Fe49c0451d7b7239E97684E7d2Bf83e0f340C";
-          const kbpTokenad = "0x68AFf0E8f8bc2e537b3f3eaF4ddA56a23C957ce3";
-          const kaiTokenad = "0x5adE78C865Af0aAce86803BA8FAa0a7671B96884"
+          const BridgeKaicontractAddress = "0x9741ff9Ac44Ba276d386a76f272E549334F01D3b";
+          const BridgeKaiBPcontractAddress = "0xC240F9b96Fa482f9478038B98Dea4456d3d4E6F2";
+          const kbpTokenad = "0x7673f5e21A5e37A3fa2Ffaaee2E32A07C912fe75";
+          const kaiTokenad = "0x4C0b3a14E6Cdd45Aac3d287969336EA7a765d20a"
           const BridgeKaicontract = new ethers.Contract(BridgeKaicontractAddress,BridgeKaiABI, signer);
           const BridgeKaiBPcontract = new ethers.Contract(BridgeKaiBPcontractAddress,BridgeKaiBPABI, signer);
           const Kaicontract = new ethers.Contract(kaiTokenad,kbpToken, signer);
